@@ -89,7 +89,7 @@
     <th>
       Chaudière électrique
     </th>
-    <td colspan="3">
+    <td>
       <% heater = GenServer.call(Canopus.Heater, :get_heater) %>
       <%= if heater.is_on == "on" do %>
         <a href="/heater/off">
@@ -104,6 +104,26 @@
           </span>
         </a>
       <% end %>
+    </td>
+    <td colspan="2">
+
+      <form action="/n_sim_open" method="POST">
+        <div class="select is-small">
+          <select name="n_sim_open" onchange="this.form.submit()">
+            <% n = GenServer.call Canopus.Thermostat, :get_n_sim_open %>
+            <option value="2" <%= if n == 2 do "selected" end %>>2</option>
+            <option value="3" <%= if n == 3 do "selected" end %>>3</option>
+            <option value="4" <%= if n == 4 do "selected" end %>>4</option>
+            <option value="5" <%= if n == 5 do "selected" end %>>5</option>
+            <option value="6" <%= if n == 6 do "selected" end %>>6</option>
+            <option value="7" <%= if n == 7 do "selected" end %>>7</option>
+            <option value="8" <%= if n == 8 do "selected" end %>>8</option>
+            <option value="9" <%= if n == 9 do "selected" end %>>9</option>
+            <option value="10" <%= if n == 10 do "selected" end %>>10</option>
+            <option value="11" <%= if n == 11 do "selected" end %>>11</option>
+          </select>
+        </div>
+      </form>
     </td>
   </tfoot>
 </table>

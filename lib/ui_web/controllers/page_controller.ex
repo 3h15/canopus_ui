@@ -23,4 +23,10 @@ defmodule UiWeb.PageController do
     GenServer.call(Canopus.Heater, {:set_heater, is_on})
     redirect(conn,  to: "/")
   end
+
+  def set_n_sim_open(conn, %{"n_sim_open" => n_sim_open} ) do
+    {n_sim_open, _} = Integer.parse(n_sim_open)
+    GenServer.call(Canopus.Thermostat, {:set_n_sim_open, n_sim_open})
+    redirect(conn,  to: "/")
+  end
 end

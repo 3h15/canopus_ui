@@ -19,6 +19,7 @@ defmodule UiWeb.Router do
 
     get "/", PageController, :index
     post "/thermostat/:sensor_id", PageController, :set_thermostat
+    post "/n_sim_open", PageController, :set_n_sim_open
     get "/heater/:is_on", PageController, :set_heater
 
     get "/tools", ToolsController, :index
