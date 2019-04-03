@@ -1,0 +1,32 @@
+<section class="hero is-warning">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Outils
+      </h1>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <aside class="menu">
+    <p class="menu-label">
+      Clock
+    </p>
+    <ul class="menu-list">
+      <li>
+        <a href="/tools/clock" class="menu-label">
+          Status
+        </a>
+      </li>
+      <li>
+        <a href="/tools/set_clock" class="menu-label">
+          Set to NTP time
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <a href="/" class="menu-label">
+      Retour
+    </a>
+  </aside>
+</section>

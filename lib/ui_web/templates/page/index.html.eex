@@ -1,0 +1,109 @@
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <div class="navbar-item has-text-weight-semibold" style="flex: 1 1 auto;">
+      <% avg_temperature = GenServer.call Canopus.Thermostat, :get_average_temperature %>
+      <%= Float.round avg_temperature, 1 %>
+    </div>
+
+    <div class="navbar-item" style="padding-right:20px;">
+      <%= @time%>
+    </div>
+
+    <a href="/tools" class="burger navbar-burger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+  </div>
+</nav>
+
+<table class="table is-striped is-fullwidth is-marginless">
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <span class="icon has-text-info">
+          <i class="fa fa-thermometer-three-quarters"></i>
+        </span>
+      </th>
+      <th>
+        <span class="icon has-text-info">
+          <i class="fa fa-fire"></i>
+        </span>
+      </th>
+      <th>
+        <span class="icon has-text-info">
+          <i class="fa fa-clock-o"></i>
+        </span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for room <- Canopus.HW.get_all do %>
+      <% sensor = GenServer.call(Canopus.Thermostat, {:get, room.sensor_id}) %>
+      <tr>
+        <th><%= room.label %></th>
+        <td class="white-space:nowrap;">
+          <span style="Font-family: Helvetica Neue;">
+            <%= if sensor.temperature != nil do Float.round sensor.temperature, 1 else "" end %>
+          </span>
+            <%= cond do %>
+              <% sensor.heating_is_on -> %>
+                <span class="icon has-text-danger">
+                  <i class="fa fa-fire"></i>
+                </span>
+              <% sensor.target_temperature > sensor.temperature -> %>
+                <span class="icon has-text-warning">
+                  <i class="fa fa-fire"></i>
+                </span>
+              <% true -> %>
+            <% end %>
+        </td>
+        <td>
+
+          <form action="/thermostat/<%= room.sensor_id %>" method="POST">
+            <div class="select is-small">
+              <select name="target_temperature" onchange="this.form.submit()">
+                <option value="5" <%= if sensor.target_temperature == 5 do "selected" end %>>&nbsp;*</option>
+                <option value="12" <%= if sensor.target_temperature == 12 do "selected" end %>>12</option>
+                <option value="15" <%= if sensor.target_temperature == 15 do "selected" end %>>15</option>
+                <option value="16" <%= if sensor.target_temperature == 16 do "selected" end %>>16</option>
+                <option value="17" <%= if sensor.target_temperature == 17 do "selected" end %>>17</option>
+                <option value="18" <%= if sensor.target_temperature == 18 do "selected" end %>>18</option>
+                <option value="19" <%= if sensor.target_temperature == 19 do "selected" end %>>19</option>
+                <option value="20" <%= if sensor.target_temperature == 20 do "selected" end %>>20</option>
+                <option value="21" <%= if sensor.target_temperature == 21 do "selected" end %>>21</option>
+                <option value="22" <%= if sensor.target_temperature == 22 do "selected" end %>>22</option>
+              </select>
+            </div>
+          </form>
+
+        </td>
+        <td>
+          <%= if sensor.last_update_time != "" do Canopus.Clock.minutes_from_now(sensor.last_update_time) end %>´
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <th>
+      Chaudière électrique
+    </th>
+    <td colspan="3">
+      <% heater = GenServer.call(Canopus.Heater, :get_heater) %>
+      <%= if heater.is_on == "on" do %>
+        <a href="/heater/off">
+          <span class="icon has-text-danger">
+            <i class="fa fa-fire"></i>
+          </span>
+        </a>
+      <% else %>
+        <a href="/heater/on">
+          <span class="icon has-text-grey-lighter">
+            <i class="fa fa-fire"></i>
+          </span>
+        </a>
+      <% end %>
+    </td>
+  </tfoot>
+</table>

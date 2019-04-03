@@ -1,0 +1,12 @@
+<%= render "menubar.html" %>
+<section class="section">
+Current clock time:
+  <div>
+    <%= @clock_time %>
+  </div>
+Current NTP time:
+  <div>
+    <%= @ntp_time %>
+  </div>
+</section>
+
